@@ -20,15 +20,20 @@ namespace TrashCollector.Models
         [Display(Name = "Last Name")]
         [Required]
         public string LastName { get; set; }
+        public string History { get; set; }
 
         
         [ForeignKey("AppUser")] 
         public string AppUserId { get; set; }
         public IdentityUser AppUser { get; set; }
-        
-         public string Address { get; set; }
+
+        [ForeignKey("Address")]
+        public int AddressId { get; set; }
+        public Address Address { get; set; }
+        [ForeignKey("Account")]
+        public int AccountId { get; set; }
         public int Account { get; set; }
-       
-       
+
+
     }
 }

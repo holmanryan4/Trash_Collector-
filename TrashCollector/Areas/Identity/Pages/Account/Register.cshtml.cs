@@ -91,10 +91,21 @@ namespace TrashCollector.Areas.Identity.Pages.Account
                     if (await _roleManager.RoleExistsAsync(Input.Role))
                     {
                         await _userManager.AddToRoleAsync(user, Input.Role);
+                       
+                       
+                    }
+                    if (Input.Role == "Customer")
+                    {
+                        return RedirectToAction("Create", "Customers");
+                    }
+                    if (Input.Role == "Employee")
+                    {
+                        return RedirectToAction("Create", "Employees");
                     }
 
                     _logger.LogInformation("User created a new account with password.");
-
+                    
+                    
                     var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
                     code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
                     var callbackUrl = Url.Page(
