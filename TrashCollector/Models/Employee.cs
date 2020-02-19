@@ -12,6 +12,7 @@ namespace TrashCollector.Models
     {
         [Key]
         public int Id { get; set; }
+        public int Zip { get; set; }
 
         [Display(Name = "First Name")]
         [Required]
