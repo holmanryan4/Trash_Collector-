@@ -30,10 +30,11 @@ namespace TrashCollector.Models
         [ForeignKey("Address")]
         public int AddressId { get; set; }
         public Address Address { get; set; }
+       // public IEnumerable<Address> Addresses { get; set; }
+
         [ForeignKey("Account")]
         public int AccountId { get; set; }
         public int Account { get; set; }
-
-
+       // public IEnumerable<Account> Accounts { get; set; }
     }
 }

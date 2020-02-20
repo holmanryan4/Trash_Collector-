@@ -23,7 +23,7 @@ namespace TrashCollector.Controllers
         // GET: Customers
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = _context.Customer.Include(c => c.AppUser);
+            var applicationDbContext = _context.Customer.Include("Address");
             return View(await applicationDbContext.ToListAsync());
         }
 
@@ -62,13 +62,16 @@ namespace TrashCollector.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,FirstName,LastName,AppUserId,Address,Account")] Customer customer)
         {
-            
-          
+
+           
+
             if (ModelState.IsValid)
             {
+                var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
+                customer.AppUserId = userId;
                 _context.Add(customer);
                 await _context.SaveChangesAsync();
-                return RedirectToAction("index", "Customers");
+                return RedirectToAction("Account", "Customers");
             }
             ViewData["AppUserId"] = new SelectList(_context.Users, "Id", "Id", customer.AppUserId);
             return View(customer);
@@ -161,5 +164,34 @@ namespace TrashCollector.Controllers
         {
             return _context.Customer.Any(e => e.Id == id);
         }
+        public IActionResult SetupAccount()
+        {
+
+            ViewData["AppUserId"] = new SelectList(_context.Users, "Id", "Id");
+
+            return View();
+        }
+
+        // POST: Customers/Account
+        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
+        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> SetupAccount([Bind("Id,FirstName,LastName,AppUserId,Address,Account")] Account account)
+        {
+
+
+
+            if (ModelState.IsValid)
+            {
+                //var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
+                //customer.AppUserId = userId;
+                _context.Add(account);
+                await _context.SaveChangesAsync();
+                return RedirectToAction("CustomerHopepage", "Customers");
+            }
+           
+        }
+
     }
 }
