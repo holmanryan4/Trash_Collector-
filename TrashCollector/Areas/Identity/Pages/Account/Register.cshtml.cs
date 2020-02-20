@@ -94,14 +94,7 @@ namespace TrashCollector.Areas.Identity.Pages.Account
                        
                        
                     }
-                    if (Input.Role == "Customer")
-                    {
-                        return RedirectToAction("Create", "Customers");
-                    }
-                    if (Input.Role == "Employee")
-                    {
-                        return RedirectToAction("Create", "Employees");
-                    }
+                   
 
                     _logger.LogInformation("User created a new account with password.");
                     

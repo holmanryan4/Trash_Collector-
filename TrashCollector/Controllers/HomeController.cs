@@ -20,6 +20,14 @@ namespace TrashCollector.Controllers
 
         public IActionResult Index()
         {
+            if (User.IsInRole( "Customer"))
+            {
+                return RedirectToAction("Create", "Customers");
+            }
+            if (Input.Role == "Employee")
+            {
+                return RedirectToAction("Create", "Employees");
+            }
             return View();
         }
 

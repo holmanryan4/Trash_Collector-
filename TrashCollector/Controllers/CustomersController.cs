@@ -164,7 +164,8 @@ namespace TrashCollector.Controllers
         {
             return _context.Customer.Any(e => e.Id == id);
         }
-        public IActionResult SetupAccount()
+        //GET Customer/Account
+        public IActionResult Account()
         {
 
             ViewData["AppUserId"] = new SelectList(_context.Users, "Id", "Id");
@@ -177,7 +178,7 @@ namespace TrashCollector.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> SetupAccount([Bind("Id,FirstName,LastName,AppUserId,Address,Account")] Account account)
+        public async Task<IActionResult> Account([Bind("Id,FirstName,LastName,AppUserId,Address,Account")] Account account)
         {
 
 
@@ -190,7 +191,7 @@ namespace TrashCollector.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction("CustomerHopepage", "Customers");
             }
-           
+            return View();
         }
 
     }
