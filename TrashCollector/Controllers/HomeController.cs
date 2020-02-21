@@ -26,28 +26,32 @@ namespace TrashCollector.Controllers
         {
             var user = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
             var userCustomer = _context.Customer.Where(s => s.AppUserId == user).FirstOrDefault();
-            var employeeUser = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
+            //var employeeUser = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
             var userEmployee = _context.Customer.Where(s => s.AppUserId == user).FirstOrDefault();
 
-            if (userCustomer == null)
+            if (User.IsInRole("Customer") && userCustomer == null)
             {
-                return RedirectToAction("Account", "Customers");
+                return RedirectToAction("Create","Customers");
             }
             else if (userCustomer != null)
             {
                 return RedirectToAction("CustomerHomepage", "Customers");
             }
-            if (userEmployee == null)
+            if (User.IsInRole("Employee") && userEmployee == null)
             {
                 return RedirectToAction("Create", "Employees");
             }
             else if(userEmployee != null)
             {
-                return RedirectToAction("index", "Customers");
+                return RedirectToAction("Index", "Customers");
+            }
+            else
+            {
+                return View();
             }
            
             
-            return View();
+          
         }
 
         public IActionResult Privacy()

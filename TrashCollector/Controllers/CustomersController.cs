@@ -24,6 +24,7 @@ namespace TrashCollector.Controllers
         public async Task<IActionResult> Index()
         {
             var applicationDbContext = _context.Customer.Include("Address");
+            
             return View(await applicationDbContext.ToListAsync());
         }
 
@@ -70,6 +71,7 @@ namespace TrashCollector.Controllers
                 var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
                 customer.AppUserId = userId;
                 _context.Add(customer);
+             
                 await _context.SaveChangesAsync();
                 return RedirectToAction("Account", "Customers");
             }
@@ -197,7 +199,10 @@ namespace TrashCollector.Controllers
         [HttpGet]
         public ActionResult CustomerHomepage()
         {
-            return View();
+            var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var currentUser = _context.Customer.Where(c=> c.AppUserId == userId).Include("Address").FirstOrDefault();
+           
+            return View(currentUser);
         }
 
     }

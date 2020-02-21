@@ -1,5 +1,6 @@
 ﻿@model TrashCollector.Models.Customer
 
+
 @{
     ViewData["Title"] = "Customer Homepage";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -49,16 +50,47 @@
             @Html.DisplayFor(model => model.Address.ZipCode)
         </dd>
         <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Account)
+            @Html.DisplayNameFor(model => model.Account.StartDay)
         </dt>
         <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Account)
+            @Html.DisplayFor(model => model.Account.EndDay)
         </dd>
-        
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Account.PickupDay)
+        </dd>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Account.OneTimePickup)
+        </dd>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Account.Balance)
+        </dd>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Account.AccountStatus)
+        </dd>
+
     </dl>
+    <h4>Manage Account.</h4>
+
+    <dl class="table">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.FirstName)
+        </dt>
+
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.LastName)
+        </dt>
+
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Address)
+
+        </dt>
+
+
+
+    </dl>
+
+
 </div>
-
-
 
 
 

@@ -34,7 +34,7 @@ namespace TrashCollector.Models
 
         [ForeignKey("Account")]
         public int AccountId { get; set; }
-        public int Account { get; set; }
+        public Account Account { get; set; }
        // public IEnumerable<Account> Accounts { get; set; }
     }
 }

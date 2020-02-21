@@ -23,7 +23,10 @@ namespace TrashCollector.Models
 
         [Display(Name = "One Time Pickup")]
         public DateTime OneTimePickup { get; set; }
-        
+
+        [Display(Name = "Account Status")]
+        public bool AccountStatus { get; set; }
+
 
     }
 }
