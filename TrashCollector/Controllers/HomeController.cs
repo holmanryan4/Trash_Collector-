@@ -2,39 +2,52 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using TrashCollector.Data;
 using TrashCollector.Models;
 
 namespace TrashCollector.Controllers
 {
-    public class HomeController : Controller
+    public class HomeController : Controller 
     {
         private readonly ILogger<HomeController> _logger;
-
-        public HomeController(ILogger<HomeController> logger)
+        ApplicationDbContext _context;
+        public HomeController(ILogger<HomeController> logger, ApplicationDbContext options)
         {
+            _context = options;
             _logger = logger;
         }
 
         public IActionResult Index()
         {
-            if (User.IsInRole("Customer"))
+            var user = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var userCustomer = _context.Customer.Where(s => s.AppUserId == user).FirstOrDefault();
+            var employeeUser = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var userEmployee = _context.Customer.Where(s => s.AppUserId == user).FirstOrDefault();
+
+            if (userCustomer == null)
             {
                 return RedirectToAction("Account", "Customers");
             }
-            else if (User.IsInRole("Employee"))
+            else if (userCustomer != null)
             {
-                //to do needs to be updated once you get to the employee section///
+                return RedirectToAction("CustomerHomepage", "Customers");
+            }
+            if (userEmployee == null)
+            {
                 return RedirectToAction("Create", "Employees");
             }
-            //if(AppUserId )
-            //{
-            //    return RedirectToAction("")
-            //}
-            //return View();
-            return View("CustomerHomepage");
+            else if(userEmployee != null)
+            {
+                return RedirectToAction("index", "Customers");
+            }
+           
+            
+            return View();
         }
 
         public IActionResult Privacy()

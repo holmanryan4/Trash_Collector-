@@ -189,8 +189,14 @@ namespace TrashCollector.Controllers
                 //customer.AppUserId = userId;
                 _context.Add(account);
                 await _context.SaveChangesAsync();
-                return RedirectToAction("CustomerHopepage", "Customers");
+                return RedirectToAction("CustomerHomepage", "Customers");
             }
+            return View();
+        }
+
+        [HttpGet]
+        public ActionResult CustomerHomepage()
+        {
             return View();
         }
 
