@@ -23,8 +23,12 @@ namespace TrashCollector.Controllers
         // GET: Employees
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = _context.Employee.Include(e => e.AppUser);
-            return View(await applicationDbContext.ToListAsync());
+            Employee employee = new Employee();
+            var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var employeeInDb = _context.Employee.Where(e => e.AppUserId == userId).FirstOrDefault();
+            var Customers = _context.Customer.Where(c => c.Address.ZipCode == employee.Zip).ToList();
+            return View("EmployeeHomepage");
+           
         }
 
         // GET: Employees/Details/5

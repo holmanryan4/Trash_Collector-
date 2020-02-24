@@ -1,4 +1,4 @@
-﻿@model TrashCollector.Models.Customer
+﻿@model IEnumerable<TrashCollector.Models.Customer>
 
 @{
     ViewData["Title"] = "EmployeeHomepage";
@@ -8,43 +8,68 @@
 <h1>EmployeeHomepage</h1>
 
 
-    <h4>Customer with pick up's today</h4>
-    <hr />
-    <table class="table">
-        <thead>
+<h4>Customer with pick up's today</h4>
+<hr />
+<table class="table">
+    <thead>
+        <tr>
+           
+            <th>
+                @Html.DisplayNameFor(model => model.FirstName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.LastName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Address.StreetAddress)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Address.City)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Address.State)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Address.ZipCode)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Account)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model){       
             <tr>
-                <th>
-                    @Html.DisplayNameFor(model => model.AppUserId)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.FirstName)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.LastName)
-                </th>
-
-                <th>
-                    @Html.DisplayNameFor(model => model.Address.StreetAddress)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Address.City)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Address.State)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Address.ZipCode)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Account)
-                </th>
-
-                <th></th>
+               
+                <td>
+                    @Html.DisplayFor(modelItem => item.FirstName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.LastName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Address.StreetAddress)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Address.City)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Address.State)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Address.ZipCode)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Account)
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                    <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                    <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                </td>
             </tr>
-        </thead>
-        
-    </table>
-@*<div>
-    <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
-    <a asp-action="Index">Back to List</a>
-</div>*@
+         }
+    </tbody>
+</table>
+
