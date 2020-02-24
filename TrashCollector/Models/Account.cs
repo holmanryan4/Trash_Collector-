@@ -9,7 +9,7 @@ namespace TrashCollector.Models
     public class Account
     {
         [Key]
-        public int Id { get; set; }
+        public int AccountId { get; set; }
 
         [Display(Name = "Pickup Day")]
         public string PickupDay { get; set; }

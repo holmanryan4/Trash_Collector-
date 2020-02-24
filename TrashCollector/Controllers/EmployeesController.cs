@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -63,7 +64,7 @@ namespace TrashCollector.Controllers
             {
                 _context.Add(employee);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction("EmployeeHomepage","Employees");
             }
             ViewData["AppUserId"] = new SelectList(_context.Users, "Id", "Id", employee.AppUserId);
             return View(employee);
@@ -155,6 +156,14 @@ namespace TrashCollector.Controllers
         private bool EmployeeExists(int id)
         {
             return _context.Employee.Any(e => e.Id == id);
+        }
+        [HttpGet]
+        public ActionResult EmployeeHomepage()
+        {
+            var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var currentUser = _context.Employee.Where(c => c.AppUserId == userId).FirstOrDefault();
+
+            return View(currentUser);
         }
     }
 }

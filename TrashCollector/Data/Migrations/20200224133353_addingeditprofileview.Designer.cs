@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TrashCollector.Data;
 
 namespace TrashCollector.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20200224133353_addingeditprofileview")]
+    partial class addingeditprofileview
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -48,22 +50,22 @@ namespace TrashCollector.Data.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "17b75b32-37b2-405e-ada8-6c3d9c29178e",
-                            ConcurrencyStamp = "289dc0e6-ea3b-427f-80e3-493f51049f4a",
+                            Id = "f67f2580-b2e4-4f14-8587-574466f50b59",
+                            ConcurrencyStamp = "6585fc45-ce98-4e9a-bacc-9cc87da41830",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
-                            Id = "3abd806f-b50c-40d4-a43b-f74b49f482b8",
-                            ConcurrencyStamp = "0fe08175-3be7-4f1e-95ff-48b6a162131c",
+                            Id = "0d95be33-54ef-4bce-9889-f27977af2a77",
+                            ConcurrencyStamp = "93cfb9ef-28e8-42a8-a652-ee6b57a4c8c5",
                             Name = "Customer",
                             NormalizedName = "CUSTOMER"
                         },
                         new
                         {
-                            Id = "936d6d3c-35fb-4fe9-8d4a-0c39d5d64f49",
-                            ConcurrencyStamp = "49c48c8f-1e7b-4982-b138-c28ba88516da",
+                            Id = "6174d1e0-d53d-44bf-adce-5cbdd478e268",
+                            ConcurrencyStamp = "56629197-f513-4fe8-beca-9aa473e7a3a0",
                             Name = "Employee",
                             NormalizedName = "EMPLOYEE"
                         });
@@ -240,7 +242,7 @@ namespace TrashCollector.Data.Migrations
 
             modelBuilder.Entity("TrashCollector.Models.Account", b =>
                 {
-                    b.Property<int>("AccountId")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
@@ -263,7 +265,7 @@ namespace TrashCollector.Data.Migrations
                     b.Property<DateTime>("StartDay")
                         .HasColumnType("datetime2");
 
-                    b.HasKey("AccountId");
+                    b.HasKey("Id");
 
                     b.ToTable("Account");
                 });
