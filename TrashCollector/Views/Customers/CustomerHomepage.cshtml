@@ -56,6 +56,12 @@
             @Html.DisplayFor(model => model.Account.StartDay)
         </dd>
         <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Account.EndDay)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Account.EndDay)
+        </dd>
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.Account.PickupDay)
         </dt>
         <dd class="col-sm-10">
@@ -81,27 +87,21 @@
         </dd>
 
     </dl>
-    <h4>Manage Account.</h4>
-
-    <dl class="table">
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.FirstName)
-        </dt>
-
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.LastName)
-        </dt>
-
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Address)
-
-        </dt>
+    <h4> Edit Account Details.</h4>
+    <table class="table">
+        <thead>
+            <tr>
+                <td>
+                    <button><a asp-action="EditProfile" asp-route-id="">EditProfile</a></button> <br>
+                    <br>
+                    <br>
+                    <button><a asp-action="EditProfile" asp-route-id="">Setup One Time Pickup</a></button>
 
 
-
-    </dl>
-
-
+</tr>
+        </thead>
+       
+    </table>
 </div>
 
 

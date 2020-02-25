@@ -68,10 +68,10 @@ namespace TrashCollector.Controllers
 
             if (ModelState.IsValid)
             {
-                customer.Account = new Account();
+                //customer.Account = new Account();
                 var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
                 customer.AppUserId = userId;
-   
+                
                 _context.Add(customer);
              
                 await _context.SaveChangesAsync();
@@ -201,7 +201,7 @@ namespace TrashCollector.Controllers
         public ActionResult CustomerHomepage()
         {
             var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
-            var currentUser = _context.Customer.Where(c=> c.AppUserId == userId).Include("Address").FirstOrDefault();
+            var currentUser = _context.Customer.Where(c=> c.AppUserId == userId).Include("Address").Include("Account").FirstOrDefault();
            
             return View(currentUser);
         }
@@ -252,7 +252,7 @@ namespace TrashCollector.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction("CustomerHomepage");
             }
             ViewData["AppUserId"] = new SelectList(_context.Users, "Id", "Id", customer.AppUserId);
             return View(customer);
