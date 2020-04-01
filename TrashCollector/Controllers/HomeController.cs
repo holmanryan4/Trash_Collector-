@@ -14,8 +14,9 @@ namespace TrashCollector.Controllers
 {
     public class HomeController : Controller 
     {
+        private readonly ApplicationDbContext _context;
         private readonly ILogger<HomeController> _logger;
-        ApplicationDbContext _context;
+       // ApplicationDbContext _context;
         public HomeController(ILogger<HomeController> logger, ApplicationDbContext options)
         {
             _context = options;
