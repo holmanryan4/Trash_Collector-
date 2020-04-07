@@ -54,13 +54,52 @@
             @Html.DisplayFor(model => model.Address.ZipCode)
         </dd>
         <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Account)
+            @Html.DisplayNameFor(model => model.Account.PickupDay)
         </dt>
         <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Account)
+            @Html.DisplayFor(model => model.Account.PickupDay)
         </dd>
     </dl>
 </div>
+<div id="maps" style="height: 500px; width: 500px">
+
+</div>
+<script>
+   
+    function initMap() {
+        var myLatLng = { lat: @Model.Address.Lat, lng: @Model.Address.Lng};
+        var map = new google.maps.Map(document.getElementById('map'), {
+            zoom: 15,
+            center: myLatLng
+        });
+        var marker = new google.maps.Marker({
+            position: myLatLng,
+            map: map
+
+        });
+
+    }
+             
+       
+        //     function geocodeAddress(geocoder, resultsMap) {
+        //var address = document.getElementById('address').value;
+        //geocoder.geocode({'address': address}, function(results, status) {
+        //  if (status === 'OK') {
+        //    resultsMap.setCenter(results[0].geometry.location);
+        //    var marker = new google.maps.Marker({
+        //      map: resultsMap,
+        //      position: results[0].geometry.location
+        //    });
+        //  } else {
+        //    alert('Geocode was not successful for the following reason: ' + status);
+        //  }
+        //});
+        //     }
+</script>
+
+<script async defer
+        src=@ViewBag.mymap>
+</script>
 <div>
     <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
     <a asp-action="Index">Back to List</a>

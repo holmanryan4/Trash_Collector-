@@ -10,6 +10,13 @@
 <p>
     <a asp-action="Create">Create New</a>
 </p>
+<form asp-controller="Customers" asp-action="Index">
+    <p>
+        Filter by PickupDay: <input type="text" name="SearchString">
+        <input type="submit" value="Filter" />
+        <a asp-action="Index">Show All Customers</a>
+    </p>
+</form>
 <table class="table">
     <thead>
         <tr>
@@ -35,7 +42,7 @@
                 @Html.DisplayNameFor(model => model.Address.ZipCode)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Account)
+                @Html.DisplayNameFor(model => model.Account.PickupDay)
             </th>
             <th></th>
         </tr>
@@ -65,7 +72,7 @@
                 @Html.DisplayFor(modelItem => item.Address.ZipCode)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Account)
+                @Html.DisplayFor(modelItem => item.Account.PickupDay)
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |

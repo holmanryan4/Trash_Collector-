@@ -14,6 +14,8 @@ namespace TrashCollector.Models
         public string City { get; set; }
         public string State { get; set; }
         public int ZipCode { get; set; }
+        public double? Lat { get; set; }
+        public double? Lng { get; set; }
         
     }
 }

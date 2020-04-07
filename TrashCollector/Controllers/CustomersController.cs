@@ -8,6 +8,9 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using TrashCollector.Data;
 using TrashCollector.Models;
+using Newtonsoft.Json.Linq;
+using System.Net.Http;
+using Newtonsoft.Json;
 
 namespace TrashCollector.Controllers
 {
@@ -21,31 +24,47 @@ namespace TrashCollector.Controllers
         }
 
         // GET: Customers
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string searchString)
         {
-            var applicationDbContext = _context.Customer.Include("Address");
-            
+            var user = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var userCustomer = _context.Customer.Where(s => s.AppUserId == user).FirstOrDefault();
+            var applicationDbContext = _context.Customer.Include("Address").Include("Account");
+
+           // List<Customer> songscustomerdays = _context.Customer
+           //.Where(o => o.AccountId == userCustomer.Id)
+           // .Distinct() // To eliminate duplicate customers in the result
+           // .ToList();
+            var customerday = from m in _context.Customer
+                              .Where(c => c.AccountId == userCustomer.Id)
+                              select m;
+
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                customerday = customerday.Where(s => s.Account.PickupDay.Contains(searchString));
+
+                return View(await customerday.ToListAsync());
+            }
             return View(await applicationDbContext.ToListAsync());
+
         }
 
         // GET: Customers/Details/5
         public async Task<IActionResult> Details(int? id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
+           
             var customer = await _context.Customer
                 .Include(c => c.Address)
                 .Include(c => c.AppUser)
+                .Include(c => c.Account)
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (customer == null)
-            {
-                return NotFound();
-            }
 
-            return View(customer);
+            ViewBag.mymap = "https://maps.googleapis.com/maps/api/js?key=" + APIs.Keys.googleKey + "&callback=initMap";
+            var mapUser = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var userMap = _context.Customer.Include(c => c.Address).Where(c => c.AppUserId == mapUser)
+                .Select(c => c.Address).SingleOrDefault();
+            ViewBag.CustomerLat = customer.Address.Lat;
+            ViewBag.CustomerLng = customer.Address.Lng;
+            return View("Details", customer);
         }
 
         // GET: Customers/Create
@@ -62,7 +81,7 @@ namespace TrashCollector.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,FirstName,LastName,AppUserId,Address,Account")] Customer customer)
+        public async Task<IActionResult> Create( Customer customer)
         {
 
            
@@ -76,6 +95,29 @@ namespace TrashCollector.Controllers
                 _context.Add(customer);
              
                 await _context.SaveChangesAsync();
+
+                var user = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
+                var userCustomer = _context.Customer.Where(s => s.AppUserId == user).FirstOrDefault();
+                HttpClient client = new HttpClient();
+                if (userCustomer.Address.Lat == null || userCustomer.Address.Lng == null)
+                {
+                    string location = userCustomer.Address.StreetAddress + "+" + userCustomer.Address.City + "+" + userCustomer.Address.State + "+" + userCustomer.Address.ZipCode;
+                    string url = "https://maps.googleapis.com/maps/api/geocode/json?address=" + location + "&key=" + APIs.Keys.googleKey;
+                    HttpResponseMessage response = await client.GetAsync(url);
+                    string answer = await response.Content.ReadAsStringAsync();
+                    if (response.IsSuccessStatusCode)
+                    {
+                        GeoCode GeoResult = JsonConvert.DeserializeObject<GeoCode>(answer);
+                        var lat = GeoResult.results[0].geometry.location.lat;
+                        var lng = GeoResult.results[0].geometry.location.lng;
+                        userCustomer.Address.Lat = lat;
+                        userCustomer.Address.Lng = lng;
+                        _context.Update(userCustomer.Address);
+                    }
+                    await _context.SaveChangesAsync();
+                }
+
+
                 return RedirectToAction("CustomerHomepage", "Customers");
             }
             ViewData["AppUserId"] = new SelectList(_context.Users, "Id", "Id", customer.AppUserId);
@@ -148,6 +190,7 @@ namespace TrashCollector.Controllers
 
             var customer = await _context.Customer
                 .Include(c => c.AppUser)
+                .Include(c => c.Account)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (customer == null)
             {

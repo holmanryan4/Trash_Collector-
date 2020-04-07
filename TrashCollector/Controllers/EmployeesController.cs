@@ -62,7 +62,7 @@ namespace TrashCollector.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Zip,FirstName,LastName,AppUserId")] Employee employee)
+        public async Task<IActionResult> Create( Employee employee)
         {
             if (ModelState.IsValid)
             {
@@ -96,7 +96,7 @@ namespace TrashCollector.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Zip,FirstName,LastName,AppUserId")] Employee employee)
+        public async Task<IActionResult> Edit(int id,  Employee employee)
         {
             if (id != employee.Id)
             {
@@ -162,12 +162,16 @@ namespace TrashCollector.Controllers
             return _context.Employee.Any(e => e.Id == id);
         }
         [HttpGet]
-        public ActionResult EmployeeHomepage()
+        public async Task<ActionResult> EmployeeHomepage(Customer customer)
         {
             var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
-            var currentUser = _context.Employee.Where(c => c.AppUserId == userId).FirstOrDefault();
-
-            return View(currentUser);
+            var currentEmployee = _context.Employee.Where(c => c.AppUserId == userId).FirstOrDefault();
+            var customers = _context.Customer
+                .Include(c => c.Account)
+                .Include(c => c.Address)
+                .Where(c => c.Address.ZipCode == currentEmployee.Zip).ToList();
+            await _context.SaveChangesAsync();
+            return View(customers);
         }
     }
 }
