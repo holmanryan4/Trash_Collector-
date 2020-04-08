@@ -28,7 +28,7 @@ namespace TrashCollector.Controllers
             var user = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
             var userCustomer = _context.Customer.Where(s => s.AppUserId == user).FirstOrDefault();
             //var employeeUser = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
-            var userEmployee = _context.Customer.Where(s => s.AppUserId == user).FirstOrDefault();
+            var userEmployee = _context.Employee.Where(s => s.AppUserId == user).FirstOrDefault();
 
             if (User.IsInRole("Customer") && userCustomer == null)
             {

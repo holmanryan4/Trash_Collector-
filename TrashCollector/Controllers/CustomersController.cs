@@ -30,10 +30,7 @@ namespace TrashCollector.Controllers
             var userCustomer = _context.Customer.Where(s => s.AppUserId == user).FirstOrDefault();
             var applicationDbContext = _context.Customer.Include("Address").Include("Account");
 
-           // List<Customer> songscustomerdays = _context.Customer
-           //.Where(o => o.AccountId == userCustomer.Id)
-           // .Distinct() // To eliminate duplicate customers in the result
-           // .ToList();
+           
             var customerday = from m in _context.Customer
                               .Where(c => c.AccountId == userCustomer.Id)
                               select m;
@@ -58,10 +55,11 @@ namespace TrashCollector.Controllers
                 .Include(c => c.Account)
                 .FirstOrDefaultAsync(m => m.Id == id);
 
-            ViewBag.mymap = "https://maps.googleapis.com/maps/api/js?key=" + APIs.Keys.googleKey + "&callback=initMap";
+           
             var mapUser = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
             var userMap = _context.Customer.Include(c => c.Address).Where(c => c.AppUserId == mapUser)
                 .Select(c => c.Address).SingleOrDefault();
+            ViewBag.mymap = "https://maps.googleapis.com/maps/api/js?key=" + APIs.Keys.googleKey + "&callback=initMap";
             ViewBag.CustomerLat = customer.Address.Lat;
             ViewBag.CustomerLng = customer.Address.Lng;
             return View("Details", customer);
@@ -128,16 +126,10 @@ namespace TrashCollector.Controllers
         public async Task<IActionResult> Edit(int? id)
         {
 
-            if (id == null)
-            {
-                return NotFound();
-            }
+            
 
             var customer = await _context.Customer.FindAsync(id);
-            if (customer == null)
-            {
-                return NotFound();
-            }
+            
             ViewData["AppUserId"] = new SelectList(_context.Users, "Id", "Id", customer.AppUserId);
             ViewData["AddressId"] = new SelectList(_context.Set<Address>(), "Id", "Id", customer.AddressId);
             return View(customer);
@@ -155,7 +147,6 @@ namespace TrashCollector.Controllers
 
             if (ModelState.IsValid)
             {
-
 
                 var Dbcustomer = _context.Customer.Where(s => s.Id == customer.Id).FirstOrDefault();
                 Dbcustomer.FirstName = customer.FirstName;
@@ -177,7 +168,7 @@ namespace TrashCollector.Controllers
             }
             ViewData["AddressId"] = new SelectList(_context.Set<Address>(), "Id", "Id", customer.AddressId);
             ViewData["AppUserId"] = new SelectList(_context.Users, "Id", "Id", customer.AppUserId);
-            return View(customer);
+            return View();
         }
 
         // GET: Customers/Delete/5

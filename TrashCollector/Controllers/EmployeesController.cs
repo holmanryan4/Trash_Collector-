@@ -23,10 +23,10 @@ namespace TrashCollector.Controllers
         // GET: Employees
         public async Task<IActionResult> Index()
         {
-            Employee employee = new Employee();
+            //Employee employee = new Employee();
             var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
             var employeeInDb = _context.Employee.Where(e => e.AppUserId == userId).FirstOrDefault();
-            var Customers = _context.Customer.Where(c => c.Address.ZipCode == employee.Zip).ToList();
+           // var Customers = _context.Customer.Where(c => c.Address.ZipCode == employee.Zip).ToList();
             return View("EmployeeHomepage");
            
         }
@@ -71,7 +71,7 @@ namespace TrashCollector.Controllers
                 return RedirectToAction("EmployeeHomepage","Employees");
             }
             ViewData["AppUserId"] = new SelectList(_context.Users, "Id", "Id", employee.AppUserId);
-            return View(employee);
+            return RedirectToAction("Index", "Home");
         }
 
         // GET: Employees/Edit/5
@@ -162,16 +162,16 @@ namespace TrashCollector.Controllers
             return _context.Employee.Any(e => e.Id == id);
         }
         [HttpGet]
-        public async Task<ActionResult> EmployeeHomepage(Customer customer)
+        public async Task<ActionResult> EmployeeHomepage()
         {
             var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
             var currentEmployee = _context.Employee.Where(c => c.AppUserId == userId).FirstOrDefault();
-            var customers = _context.Customer
-                .Include(c => c.Account)
-                .Include(c => c.Address)
-                .Where(c => c.Address.ZipCode == currentEmployee.Zip).ToList();
+            //var customers = _context.Customer.Where(c => c.Address.ZipCode == currentEmployee.Zip)
+            //    .Include(c => c.Account)
+            //    .Include(c => c.Address)
+            //    .ToList();
             await _context.SaveChangesAsync();
-            return View(customers);
+            return RedirectToAction("Index","Customers");
         }
     }
 }
